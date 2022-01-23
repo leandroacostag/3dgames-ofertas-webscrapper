@@ -1,6 +1,6 @@
 ﻿# 3dgames-ofertas-webscrapper
 
-This script is basically a webscrapper that crawls posts from a famous forum thread full of internet offers. Then this posts are sent to a telegram channel so it's easy to read over any device.
+This script is basically a webscrapper that crawls posts from a famous forum thread full of internet offers, this posts are sent to a telegram channel so they're easy to read over any device.
 
 # Instructions
 1. Install beautifulsoup4 and requests libraries: `pip install beautifulsoup4 requests`
