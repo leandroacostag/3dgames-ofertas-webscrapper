@@ -4,8 +4,8 @@ import json
 import time
 
 SLEEP_TIME = 2 #time in seconds to avoid timeout error using telegram api
-TOKEN = "2026736293:AAHtfWtfMYlnQuPP9C0raA4Ow2Sa91VEfjU"
-CHAT_ID = "-1001438784407"
+TOKEN = "BOT:TOKEN"
+CHAT_ID = "-number"
 request_url = "https://api.telegram.org/bot" + TOKEN
 
 print("Initializaing 3dgames webscrapper execution")
