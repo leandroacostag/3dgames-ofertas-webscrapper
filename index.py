@@ -97,4 +97,8 @@ for savedPage in reversed(crawledPosts):
                 results = requests.post(request_url + "/sendMediaGroup", params= params)
             
         time.sleep(SLEEP_TIME)
+print("Saving last postId crawled...")
+lastPostId = crawledPosts[lastThreadPageNumber][-1].find("span", class_="fixscroll")['id']
+with open('lastPostIdCrawled.txt', 'w') as f:
+    f.write(lastPostId)
 print("Process finished")
