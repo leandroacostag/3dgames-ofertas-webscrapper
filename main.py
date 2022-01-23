@@ -2,17 +2,21 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import time
+import ast
 
+#CONFIG
 SLEEP_TIME = 2 #time in seconds to avoid timeout error using telegram api
-TOKEN = "BOT:TOKEN"
-CHAT_ID = "-number"
+TOKEN = "bot:token" #telegram token
+CHAT_ID = "-number" #channel id
+jsonblobId = "number" #id for your json file to get last postId crawled
+
 request_url = "https://api.telegram.org/bot" + TOKEN
 
 print("Initializaing 3dgames webscrapper execution")
 
 #reading postId from the last execution
-f = open("lastPostIdCrawled.txt", "r")
-lastIdCrawled = f.read()
+lastIdCrawled = requests.get("https://jsonblob.com/api/jsonBlob/" + jsonblobId)
+lastIdCrawled = ast.literal_eval(lastIdCrawled.text)["id"]
 
 #reading last thread number from post landing page
 print("Finding last thread crawled...")
@@ -37,7 +41,7 @@ while lastIdCrawled not in postIds:
     pageNumberToCrawl = int(pageNumberToCrawl)-1
 
 # excluding posts crawled in the past
-blackListedPostIds = postIds[0:postIds.index(lastIdCrawled)] 
+blackListedPostIds = postIds[0:postIds.index(lastIdCrawled)+1] 
 
 # iterating over posts to send telegram message
 for savedPage in reversed(crawledPosts):
@@ -99,6 +103,6 @@ for savedPage in reversed(crawledPosts):
         time.sleep(SLEEP_TIME)
 print("Saving last postId crawled...")
 lastPostId = crawledPosts[lastThreadPageNumber][-1].find("span", class_="fixscroll")['id']
-with open('lastPostIdCrawled.txt', 'w') as f:
-    f.write(lastPostId)
+requests.put("https://jsonblob.com/api/jsonBlob/" + jsonblobId, json={'id':lastPostId})
+    
 print("Process finished")
