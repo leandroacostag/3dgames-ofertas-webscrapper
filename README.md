@@ -6,7 +6,7 @@ This script is basically a webscrapper that crawls posts from a famous forum thr
 1. Install beautifulsoup4 and requests libraries: `pip install beautifulsoup4 requests`
 2. Create your own bot from the telegram BOT helper. https://core.telegram.org/bots#6-botfather
 3. Create a telegram channel and take note of chatId.
-4. Go to https://jsonblob.com/ and create a new json object as {'id':'postId'} with the oldest postId you want to crawl on the 'lastPostIdCrawled.txt' file. (This will determine how long it will take your first run). 
+4. Go to https://jsonblob.com/ and create a new json object as {'id':'postId'} with the oldest postId you want to crawl. (This will determine how long it will take your first run). 
 5. Edit index.py with your own bot token, chatId and jsonblob Id.
 6. Run `python main.py` over your terminal to start running the process.
 
