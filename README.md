@@ -11,3 +11,5 @@ This script is basically a webscrapper that crawls posts from a famous forum thr
 6. Run `python main.py` over your terminal to start running the process.
 
 NOTE: you might want to create a cronjob to run this automatically every hour or so. Try here: https://www.geeksforgeeks.org/how-to-setup-cron-jobs-in-ubuntu/.
+
+NOTE2: you can try out this awesome bot here: https://t.me/+vLDTBoowBLJhOWYx
