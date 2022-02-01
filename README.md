@@ -14,4 +14,5 @@ Forum thread URL: https://foros.3dgames.com.ar/threads/942062-ofertas-online-arg
 6. Run `python main.py` over your terminal to start running the process.
 
 NOTE: you might want to create a cronjob to run this automatically every hour or so.
-NOTE2: get your desired postId by inspecting the forum source code, you should look for something like this: *<span class="fixscroll" id="post23909652"></span>*
+
+NOTE2: get your desired postId by inspecting the forum source code, you should look for something like this: `<span class="fixscroll" id="post23909652"></span>`
