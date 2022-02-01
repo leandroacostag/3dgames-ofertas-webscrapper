@@ -8,14 +8,14 @@ import ast
 SLEEP_TIME = 2 #time in seconds to avoid timeout error using telegram api
 TOKEN = "bot:token" #telegram token
 CHAT_ID = "-number" #channel id
-jsonblobId = "number" #id for your json file to get last postId crawled
+JSONBLOD_ID = "number" #id for your json file to get last postId crawled
 
 request_url = "https://api.telegram.org/bot" + TOKEN
 
 print("Initializaing 3dgames webscrapper execution")
 
 #reading postId from the last execution
-lastIdCrawled = requests.get("https://jsonblob.com/api/jsonBlob/" + jsonblobId)
+lastIdCrawled = requests.get("https://jsonblob.com/api/jsonBlob/" + JSONBLOD_ID)
 lastIdCrawled = ast.literal_eval(lastIdCrawled.text)["id"]
 
 #reading last thread number from post landing page
@@ -101,6 +101,6 @@ for savedPage in reversed(crawledPosts):
             continue
 print("Saving last postId crawled...")
 lastPostId = crawledPosts[lastThreadPageNumber][-1].find("span", class_="fixscroll")['id']
-requests.put("https://jsonblob.com/api/jsonBlob/" + jsonblobId, json={'id':lastPostId})
+requests.put("https://jsonblob.com/api/jsonBlob/" + JSONBLOD_ID, json={'id':lastPostId})
     
 print("Process finished")
