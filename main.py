@@ -50,57 +50,55 @@ for savedPage in reversed(crawledPosts):
     for post in posts:
         try:
             if post.find("span", class_="fixscroll")['id'] in blackListedPostIds: continue
+            sendMessage = []
+            author = post.find("div", class_="popupmenu memberaction").find("strong").text
+            if author == "3DGames": continue #exclude Ads
+            datetime = post.find("div", class_="posthead").find("span", class_="date").text
+            message = post.find("div", class_="content")
+            quotes = message.find_all("div", class_="bbcode_container")
+            sendMessage = datetime + " \n" + "Author: " + author
+
+            if len(quotes) > 0:
+                for quote in quotes:
+                    sendMessage = sendMessage + "\n" + "Quoted message from:" + quote.find("div", class_="bbcode_postedby").find("strong").text
+                    sendMessage = sendMessage + "\n" + '"' + quote.find("div", class_="message").text + '"'
+                for quote in message("div", class_="bbcode_container"):
+                    quote.decompose()
+
+            images = message.find_all("img")
+            links = message.find_all("a")
+
+            sendMessage = sendMessage + "\n" + message.text
+            if len(links) > 0:
+                for link in links:
+                    if isinstance(link, type(None)):
+                        continue
+                    sendMessage = sendMessage + "\n" + "Link:" + link["href"]
+
+            params = {
+                "chat_id": CHAT_ID,
+                "text": sendMessage
+            }
+            results = requests.post(request_url + "/sendMessage", params= params)
+
+            if len(images) > 0:
+                arrayOfImages = []
+                for image in images:
+                    if isinstance(image, type(None)):
+                        continue
+                    if 'http' in image["src"]:
+                        arrayOfImages.append({"type":"photo","media":image["src"]})
+                if len(arrayOfImages) > 0:
+                    params = {
+                        "chat_id": CHAT_ID,
+                        "media": json.dumps(arrayOfImages, separators=(',', ':')),
+                        "reply_to_message_id" : int(results.json()['result']['message_id'])
+                    }
+                    results = requests.post(request_url + "/sendMediaGroup", params= params)
+
+            time.sleep(SLEEP_TIME)
         except:
             continue
-        sendMessage = []
-        author = post.find("div", class_="popupmenu memberaction").find("strong").text
-        if author == "3DGames": continue #exclude Ads
-        datetime = post.find("div", class_="posthead").find("span", class_="date").text
-        message = post.find("div", class_="content")
-        quotes = message.find_all("div", class_="bbcode_container")
-
-        sendMessage = datetime
-        sendMessage = sendMessage + " \n" + "Author: " + author
-
-        if len(quotes) > 0:
-            for quote in quotes:
-                sendMessage = sendMessage + "\n" + "Quoted message from:" + quote.find("div", class_="bbcode_postedby").find("strong").text
-                sendMessage = sendMessage + "\n" + '"' + quote.find("div", class_="message").text + '"'
-            for quote in message("div", class_="bbcode_container"):
-                quote.decompose()
-
-        images = message.find_all("img")
-        links = message.find_all("a")
-
-        sendMessage = sendMessage + "\n" + message.text
-        if len(links) > 0:
-            for link in links:
-                if isinstance(link, type(None)):
-                    continue
-                sendMessage = sendMessage + "\n" + "Link:" + link["href"]
-                
-        params = {
-            "chat_id": CHAT_ID,
-            "text": sendMessage
-        }
-        results = requests.post(request_url + "/sendMessage", params= params)
-
-        if len(images) > 0:
-            arrayOfImages = []
-            for image in images:
-                if isinstance(image, type(None)):
-                    continue
-                if 'http' in image["src"]:
-                    arrayOfImages.append({"type":"photo","media":image["src"]})
-            if len(arrayOfImages) > 0:
-                params = {
-                    "chat_id": CHAT_ID,
-                    "media": json.dumps(arrayOfImages, separators=(',', ':')),
-                    "reply_to_message_id" : int(results.json()['result']['message_id'])
-                }
-                results = requests.post(request_url + "/sendMediaGroup", params= params)
-            
-        time.sleep(SLEEP_TIME)
 print("Saving last postId crawled...")
 lastPostId = crawledPosts[lastThreadPageNumber][-1].find("span", class_="fixscroll")['id']
 requests.put("https://jsonblob.com/api/jsonBlob/" + jsonblobId, json={'id':lastPostId})
